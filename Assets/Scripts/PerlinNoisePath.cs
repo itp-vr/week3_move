@@ -14,6 +14,7 @@ public class PerlinNoisePath: MonoBehaviour {
 	private Vector3 initPos;
 	private Vector3 lastPoint;
 	public LineRenderer linerender;
+	public bool induceNausea;
 
 	// Use this for initialization
 	void Start () {
@@ -24,6 +25,10 @@ public class PerlinNoisePath: MonoBehaviour {
 			last = getNextNoise();
 			buffer.Enqueue(last);
 		}
+	}
+
+	private void resetRotation(){
+		transform.localEulerAngles = Vector3.zero;
 	}
 
 	public Vector3 GetLastPoint(){
@@ -47,7 +52,8 @@ public class PerlinNoisePath: MonoBehaviour {
 		//orient toward next point
 		float nextHeight = (float) buffer.Peek();
 		Vector3 nextPos = new Vector3(pos.x, initPos.y + nextHeight, pos.z+speed);
-		transform.LookAt(nextPos);
+		//angle camera to direction of hill (vomit city)
+		if (induceNausea) transform.LookAt(nextPos);
 		//draw debug path
 		Vector3 start = pos;
 		System.Object[] bufArray = buffer.ToArray();
